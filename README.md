@@ -244,12 +244,13 @@ export DEPLOYMENT_ID=*****
 
 Configure group IDs and failover orders to manage directory server groups and their replication failover behavior. This step is critical for ensuring high availability and resilience.
 
-**dse1, set group-id, use this command to group different ds, usually by geography locations**
+**rse1, set group-id, use this command to group different ds, usually by geography locations**
 ```bash
+cd opendj/bin
 ./dsconfig \
 set-global-configuration-prop \
 --set group-id:us-east-1a \
---hostname dse2.example.com \
+--hostname rse1.example.com \
 --port 4444 \
 --bindDN uid=admin \
 --bindPassword password \
@@ -263,7 +264,182 @@ set-global-configuration-prop \
 ./dsconfig \
 set-global-configuration-prop \
 --set group-id-failover-order:us-east-1a,us-east-1c,us-west-2a,us-west-2b \
+--hostname rse1.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+```
+
+**dse1**
+```bash
+./dsconfig \
+set-global-configuration-prop \
+--set group-id:us-east-1a \
 --hostname dse1.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+
+./dsconfig \
+set-global-configuration-prop \
+--set group-id-failover-order:us-east-1a,us-east-1c,us-west-2a,us-west-2b \
+--hostname dse1.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+```
+
+**rse2**
+```bash
+./dsconfig \
+set-global-configuration-prop \
+--set group-id:us-east-1c \
+--hostname rse2.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+
+./dsconfig \
+set-global-configuration-prop \
+--set group-id-failover-order:us-east-1c,us-east-1a,us-west-2a,us-west-2b \
+--hostname rse2.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+```
+
+**dse2**
+```bash
+./dsconfig \
+set-global-configuration-prop \
+--set group-id:us-east-1c \
+--hostname dse2.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+
+./dsconfig \
+set-global-configuration-prop \
+--set group-id-failover-order:us-east-1c,us-east-1a,us-west-2a,us-west-2b \
+--hostname dse2.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+```
+
+**rsw1**
+```bash
+./dsconfig \
+set-global-configuration-prop \
+--set group-id:us-west-2a \
+--hostname rsw1.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+
+./dsconfig \
+set-global-configuration-prop \
+--set group-id-failover-order:us-west-2a,us-west-2b,us-east-1a,us-east-1c \
+--hostname rsw1.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+```
+
+**dsw1**
+```bash
+./dsconfig \
+set-global-configuration-prop \
+--set group-id:us-west-2a \
+--hostname dsw1.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+
+./dsconfig \
+set-global-configuration-prop \
+--set group-id-failover-order:us-west-2a,us-west-2b,us-east-1a,us-east-1c \
+--hostname dsw1.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+```
+
+**rsw2**
+```bash
+./dsconfig \
+set-global-configuration-prop \
+--set group-id:us-west-2b \
+--hostname rsw2.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+
+./dsconfig \
+set-global-configuration-prop \
+--set group-id-failover-order:us-west-2b,us-west-2a,us-east-1a,us-east-1c \
+--hostname rsw2.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+```
+
+**dsw2**
+```bash
+./dsconfig \
+set-global-configuration-prop \
+--set group-id:us-west-2b \
+--hostname dsw2.example.com \
+--port 4444 \
+--bindDN uid=admin \
+--bindPassword password \
+--usePkcs12TrustStore ../config/keystore \
+--trustStorePassword:file ../config/keystore.pin \
+--no-prompt
+
+./dsconfig \
+set-global-configuration-prop \
+--set group-id-failover-order:us-west-2b,us-west-2a,us-east-1a,us-east-1c \
+--hostname dsw2.example.com \
 --port 4444 \
 --bindDN uid=admin \
 --bindPassword password \
