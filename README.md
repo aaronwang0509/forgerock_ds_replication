@@ -518,3 +518,103 @@ set-synchronization-provider-prop \
 --bindPassword password \
 --no-prompt
 ```
+
+## 10. Replication with Different DN
+
+Use one set of RS to replicate date with different DN
+
+**dse3, DN: dc=example,dc=com and ou=identities**
+```bash
+export DEPLOYMENT_ID=*****
+./setup \
+--serverId dse3 \
+--deploymentId $DEPLOYMENT_ID \
+--deploymentIdPassword password \
+--rootUserDN uid=admin \
+--rootUserPassword password \
+--hostname dse3.example.com \
+--adminConnectorPort 4444 \
+--ldapPort 1389 \
+--enableStartTls \
+--ldapsPort 1636 \
+--httpsPort 8443 \
+--bootstrapReplicationServer rse1.example.com:8989 \
+--profile ds-evaluation \
+--set ds-evaluation/generatedUsers:100 \
+--profile am-identity-store \
+--set am-identity-store/amIdentityStoreAdminPassword:password \
+--acceptLicense \
+--start
+```
+
+**dse4, DN: dc=example,dc=com and ou=identities**
+```bash
+export DEPLOYMENT_ID=*****
+./setup \
+--serverId dse4 \
+--deploymentId $DEPLOYMENT_ID \
+--deploymentIdPassword password \
+--rootUserDN uid=admin \
+--rootUserPassword password \
+--hostname dse4.example.com \
+--adminConnectorPort 4444 \
+--ldapPort 1389 \
+--enableStartTls \
+--ldapsPort 1636 \
+--httpsPort 8443 \
+--bootstrapReplicationServer rse2.example.com:8989 \
+--profile ds-evaluation \
+--set ds-evaluation/generatedUsers:100 \
+--profile am-identity-store \
+--set am-identity-store/amIdentityStoreAdminPassword:password \
+--acceptLicense \
+--start
+```
+
+**dsw3, DN: dc=example,dc=com and dc=openidm**
+```bash
+export DEPLOYMENT_ID=*****
+./setup \
+--serverId dsw3 \
+--deploymentId $DEPLOYMENT_ID \
+--deploymentIdPassword password \
+--rootUserDN uid=admin \
+--rootUserPassword password \
+--hostname dsw3.example.com \
+--adminConnectorPort 4444 \
+--ldapPort 1389 \
+--enableStartTls \
+--ldapsPort 1636 \
+--httpsPort 8443 \
+--bootstrapReplicationServer rsw1.example.com:8989 \
+--profile ds-evaluation \
+--set ds-evaluation/generatedUsers:100 \
+--profile idm-repo \
+--set idm-repo/domain:forgerock.com \
+--acceptLicense \
+--start
+```
+
+**dsw4, DN: dc=example,dc=com and dc=openidm**
+```bash
+export DEPLOYMENT_ID=*****
+./setup \
+--serverId dsw4 \
+--deploymentId $DEPLOYMENT_ID \
+--deploymentIdPassword password \
+--rootUserDN uid=admin \
+--rootUserPassword password \
+--hostname dsw4.example.com \
+--adminConnectorPort 4444 \
+--ldapPort 1389 \
+--enableStartTls \
+--ldapsPort 1636 \
+--httpsPort 8443 \
+--bootstrapReplicationServer rsw2.example.com:8989 \
+--profile ds-evaluation \
+--set ds-evaluation/generatedUsers:100 \
+--profile idm-repo \
+--set idm-repo/domain:forgerock.com \
+--acceptLicense \
+--start
+```
